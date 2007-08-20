@@ -57,7 +57,8 @@ most compiles use distcc by default when configured for parallel builds.
 Group:		System/Servers
 Requires: 	gcc-c++
 Summary:	Program to distribute compilation of C or C++
-PreReq:		rpm-helper
+Requires(pre):		rpm-helper
+Requires(postun):		rpm-helper
 Requires:	%{name}-masq
 Requires:       %{name}-daemon
 
@@ -75,6 +76,8 @@ Group:		System/Servers
 Requires: 	gcc-c++
 Summary:	Program to distribute compilation of C or C++
 PreReq:		rpm-helper
+Requires(post):		rpm-helper
+Requires(postun):		rpm-helper
 Obsoletes:      %{name}-daemon
 Provides:       %{name}-daemon
 Requires:	%{name}-daemon-common
@@ -93,7 +96,8 @@ slaves nodes of the cluster.
 Group:		System/Servers
 Requires: 	gcc-c++ xinetd
 Summary:	Program to distribute compilation of C or C++
-PreReq:		rpm-helper
+Requires(pre):		rpm-helper
+Requires(post):		rpm-helper
 Obsoletes:      %{name}-daemon
 Provides:       %{name}-daemon
 Requires:	%{name}-daemon-common
