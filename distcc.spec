@@ -209,15 +209,17 @@ ln -s %{_bindir}/%{name} $RPM_BUILD_ROOT%{masqdir}/g++
 ln -s %{_bindir}/%{name} $RPM_BUILD_ROOT%{masqdir}/c++
 ln -s %{_bindir}/%{name} $RPM_BUILD_ROOT%{masqdir}/%{_target_platform}-gcc
 
-mkdir -p $RPM_BUILD_ROOT%{_menudir}
-cat > $RPM_BUILD_ROOT%{_menudir}/%{name}-gnome-monitor <<EOF
-?package(%{name}-gnome-monitor): \
-command="distccmon-gnome" \
-title="Distccmon" \
-longtitle="Distcc monitor" \
-needs="x11" \
-section="Applications/Monitoring" \
-icon="monitoring_section.png"
+mkdir -p $RPM_BUILD_ROOT/%{_datadir}/applications/mandriva-%{name}.desktop
+cat << EOF > %buildroot%{_datadir}/applications/mandriva-%{name}.desktop
+[Desktop Entry]
+Encoding=UTF-8
+Name=Distcc monitor
+Comment=Distcc monitor
+Exec=distccmon-gnome
+Icon=%{name}
+Terminal=false
+Type=Application
+Categories=System;X-MandrivaLinux-System-Monitoring
 EOF
 
 install -m755 %{name}.sh -D $RPM_BUILD_ROOT%{_sysconfdir}/profile.d/%{name}.sh
@@ -291,7 +293,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files gnome-monitor
 %defattr(-,root,root)
-%{_menudir}/*
+%{_datadir}/applications/mandriva-%{name}.desktop
 %{_bindir}/%{name}mon-gnome
 %{_datadir}/%{name}/*.png
 %{_datadir}/%{name}/*.desktop
