@@ -75,7 +75,6 @@ slaves nodes of the cluster.
 Group:		System/Servers
 Requires: 	gcc-c++
 Summary:	Program to distribute compilation of C or C++
-PreReq:		rpm-helper
 Requires(post):		rpm-helper
 Requires(postun):		rpm-helper
 Obsoletes:      %{name}-daemon
