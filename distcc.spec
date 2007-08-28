@@ -211,7 +211,6 @@ ln -s %{_bindir}/%{name} $RPM_BUILD_ROOT%{masqdir}/%{_target_platform}-gcc
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/applications/
 cat << EOF > %buildroot%{_datadir}/applications/mandriva-%{name}.desktop
 [Desktop Entry]
-Encoding=UTF-8
 Name=Distcc monitor
 Comment=Distcc monitor
 Exec=distccmon-gnome
