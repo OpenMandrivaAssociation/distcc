@@ -217,7 +217,7 @@ Exec=distccmon-gnome
 Icon=%{name}
 Terminal=false
 Type=Application
-Categories=System;X-MandrivaLinux-System-Monitoring
+Categories=System;X-MandrivaLinux-System-Monitoring;
 EOF
 
 install -m755 %{name}.sh -D $RPM_BUILD_ROOT%{_sysconfdir}/profile.d/%{name}.sh
