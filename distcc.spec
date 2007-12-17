@@ -10,7 +10,6 @@ Version:        %{version}
 Release:        %{release}
 License: 	GPL
 URL:		http://distcc.samba.org/
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Source0:        http://distcc.samba.org/ftp/distcc/%{name}-%{version}.tar.bz2
 Source1:	xinetd.d-distcc.bz2
 Source2:        %{name}d.init.bz2
