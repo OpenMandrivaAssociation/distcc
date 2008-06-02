@@ -199,7 +199,7 @@ rm -rf $RPM_BUILD_ROOT%{_docdir}/%{name}
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 echo localhost > $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/hosts
 
-mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/%{name}d
+mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/lib/%{name}d
 
 mkdir -p $RPM_BUILD_ROOT%{masqdir}
 ln -s %{_bindir}/%{name} $RPM_BUILD_ROOT%{masqdir}/gcc
@@ -231,7 +231,7 @@ touch $RPM_BUILD_ROOT%{_var}/log/%{name}d.log
 install -m644 %{name}.logrotate -D $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/%{name}d
 
 %pre daemon-common
-%_pre_useradd %{name}d %{_localstatedir}/%{name}d /sbin/nologin
+%_pre_useradd %{name}d %{_localstatedir}/lib/%{name}d /sbin/nologin
 %create_ghostfile %{_var}/log/%{name}d.log distccd adm 0644
 
 %post daemon-standalone
@@ -302,7 +302,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/%{name}d*
 %{_mandir}/man1/%{name}d.1*
 %defattr(-,distccd,distccd)
-%{_localstatedir}/%{name}d
+%{_localstatedir}/lib/%{name}d
 %attr(0640,distccd,adm) %ghost %{_var}/log/%{name}d.log
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}d
 
