@@ -155,22 +155,29 @@ fi
 EOF
 cat <<EOF > %{name}.csh
 if ( -f %{_sysconfdir}/sysconfig/ccache ) then
-    eval \`sed -n 's/^\([^#]*\)=\([^#]*\)/set \1=\2;/p' < %{_sysconfdir}/sysconfig/ccache
+    eval \`sed -n 's/^\([^#]*\)=\([^#]*\)/set \1=\2;/p' < %{_sysconfdir}/sysconfig/ccache\`
 endif
 
 if ( -f %{_sysconfdir}/sysconfig/distcc ) then
-    eval \`sed -n 's/^\([^#]*\)=\([^#]*\)/set \1=\2;/p' < %{_sysconfdir}/sysconfig/distcc
+    eval \`sed -n 's/^\([^#]*\)=\([^#]*\)/set \1=\2;/p' < %{_sysconfdir}/sysconfig/distcc\`
 endif
 
-if ( "\$USE_DISTCC_DEFAULT" == "yes" ) then
+if (\$?USE_DISTCC_DEFAULT) then
+  if ( "\$USE_DISTCC_DEFAULT" == "yes" ) then
+    if (\$?USE_CCACHE_DEFAULT) then
+
   if ( "\$USE_CCACHE_DEFAULT" == "yes" ) then
       if ( "\$path" !~ *%{_libdir}/ccache/bin* ) then
           setenv CCACHE_PREFIX %{_bindir}/distcc
       endif
   else
-      setenv path = ( %{masqdir} \$path )
+      set path = ( %{masqdir} \$path )
   endif
-fi
+    else
+      set path = ( %{masqdir} \$path)
+    endif
+  endif
+endif
 EOF
 
 cat <<EOF > %{name}.sysconfig
