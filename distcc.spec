@@ -269,11 +269,15 @@ service xinetd condrestart
 # restarting xinetd service
 service xinetd condrestart
 
+%if %mdkversion < 200900
 %post gnome-monitor
 %update_menus
+%endif
 
+%if %mdkversion < 200900
 %postun gnome-monitor
 %clean_menus
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT
