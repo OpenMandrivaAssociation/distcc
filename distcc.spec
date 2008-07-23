@@ -1,6 +1,6 @@
 %define	name    distcc 
 %define version 2.18.3
-%define release %mkrel 6
+%define release %mkrel 8
 %define masqdir %{_libdir}/%{name}/bin
 
 Name:           %{name}
