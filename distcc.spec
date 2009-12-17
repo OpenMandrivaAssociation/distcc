@@ -12,8 +12,8 @@ License: 	GPL
 URL:		http://distcc.samba.org/
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Source0:        http://distcc.samba.org/ftp/distcc/%{name}-%{version}.tar.bz2
-Source1:	xinetd.d-distcc.bz2
-Source2:        %{name}d.init.bz2
+Source1:	xinetd.d-distcc
+Source2:        distccd.init
 BuildRequires:	gtk+2-devel popt-devel
 Requires:	%{name}-client %{name}-daemon
 
@@ -127,8 +127,6 @@ This package contain a graphical version of the distcc monitor.
 
 %prep
 %setup -q
-bzcat %{SOURCE1} > xinetd.d-distcc
-bzcat %{SOURCE2} > %{name}d.init
 
 %build
 %configure2_5x --enable-gnome --with-gnome
@@ -186,6 +184,7 @@ DISTCC_HOSTS=localhost
 DISTCC_LOG=%{_var}/log/%{name}d.log
 DISTCC_VERBOSE=1
 TMPDIR=%{_var}/lib/%{name}d
+IP_ALLOW=127.0.0.1
 EOF
 
 cat << EOF > %{name}.logrotate
@@ -200,7 +199,7 @@ EOF
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man1
 %{makeinstall}
-install -m644 xinetd.d-distcc -D $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/%{name}
+install -m644 %{SOURCE1} -D $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/%{name}
 rm -rf $RPM_BUILD_ROOT%{_docdir}/%{name}
 
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
@@ -230,7 +229,7 @@ EOF
 install -m755 %{name}.sh -D $RPM_BUILD_ROOT%{_sysconfdir}/profile.d/%{name}.sh
 install -m755 %{name}.csh -D $RPM_BUILD_ROOT%{_sysconfdir}/profile.d/%{name}.csh
 install -m644 %{name}.sysconfig -D $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/%{name}
-install -m755 %{name}d.init -D %{buildroot}%{_initrddir}/%{name}d
+install -m755 %{SOURCE2} -D %{buildroot}%{_initrddir}/%{name}d
 
 mkdir -p $RPM_BUILD_ROOT%{_var}/log
 touch $RPM_BUILD_ROOT%{_var}/log/%{name}d.log
