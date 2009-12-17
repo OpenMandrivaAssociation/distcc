@@ -1,6 +1,6 @@
 %define	name    distcc 
 %define version 2.18.3
-%define release %mkrel 8
+%define release %mkrel 9
 %define masqdir %{_libdir}/%{name}/bin
 
 Name:           %{name}
@@ -14,6 +14,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Source0:        http://distcc.samba.org/ftp/distcc/%{name}-%{version}.tar.bz2
 Source1:	xinetd.d-distcc
 Source2:        distccd.init
+Patch0:		distcc-2.18.3-fix-linkage-order.patch
 BuildRequires:	gtk+2-devel popt-devel
 Requires:	%{name}-client %{name}-daemon
 
@@ -127,6 +128,7 @@ This package contain a graphical version of the distcc monitor.
 
 %prep
 %setup -q
+%patch0 -p1 -b .link_order~
 
 %build
 %configure2_5x --enable-gnome --with-gnome
