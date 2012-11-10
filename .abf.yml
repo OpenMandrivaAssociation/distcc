@@ -1,0 +1,4 @@
+sources:
+  "distcc-2.18.3.tar.bz2:"	88e4c15826bdbc5a3de0f7c1bcb429e558c6976d
+  "distccd.init:"	e2a5a11fd70012cdbabcf85bc60c9f262af4d9bc
+  "xinetd.d-distcc:"	c3ff10005885353243bf0001a69013d22822377e

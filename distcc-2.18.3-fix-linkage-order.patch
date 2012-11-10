@@ -1,0 +1,14 @@
+diff -p -up distcc-2.18.3/Makefile.in~ distcc-2.18.3/Makefile.in
+--- distcc-2.18.3/Makefile.in~	2004-10-24 01:05:48.000000000 -0400
++++ distcc-2.18.3/Makefile.in	2009-12-17 18:56:37.474105680 -0500
+@@ -378,8 +378,8 @@ src/renderer.o: src/renderer.c
+ 
+ distccmon-gnome@EXEEXT@: $(mon_obj) $(gnome_obj)
+ 	$(CC) -o $@ $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) $(LIBS)	\
+-		$(GNOME_CFLAGS) $(GNOME_LIBS)			\
+-		$(mon_obj) $(gnome_obj)
++		$(GNOME_CFLAGS) \
++		$(mon_obj) $(gnome_obj) $(GNOME_LIBS)
+ 
+ 
+ ## Dist targets
