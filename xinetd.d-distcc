@@ -1,0 +1,17 @@
+# distcc configuration for xinetd
+# default service is on 
+service distcc
+{
+	socket_type	= stream
+	protocol	= tcp
+	wait		= no
+	user		= distccd 
+	server		= /usr/bin/distccd
+	server_args	= --inetd
+	env		= TMPDIR=/var/lib/distccd
+#	per_source	= 8
+#	log_type	= FILE /var/log/distccd
+	disable		= no
+#	log_on_success	= PID HOST USERID EXIT DURATION
+#	log_on_failure	= USERID ATTEMPT
+}
