@@ -1,6 +1,6 @@
 %define	name    distcc 
 %define version 2.18.3
-%define release %mkrel 9
+%define release: 10
 %define masqdir %{_libdir}/%{name}/bin
 
 Name:           %{name}
@@ -248,7 +248,6 @@ install -m644 %{name}.logrotate -D $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/%{n
 %preun daemon-standalone
 %_preun_service %{name}d
 
-%pre daemon-xinetd
 
 %post daemon-xinetd
 # check that /etc/services has been already patched with ditscc port
