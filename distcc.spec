@@ -1,16 +1,12 @@
-%define	name    distcc 
-%define version 2.18.3
-%define release: 11
 %define masqdir %{_libdir}/%{name}/bin
 
-Name:           %{name}
+Name:           distcc
 Summary:	Program to distribute compilation of C or C++ 
 Group:		Development/C
-Version:        %{version}
-Release:        %{release}
+Version:        2.18.3
+Release:        11
 License: 	GPL
 URL:		http://distcc.samba.org/
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Source0:        http://distcc.samba.org/ftp/distcc/%{name}-%{version}.tar.bz2
 Source1:	xinetd.d-distcc
 Source2:        distccd.init
