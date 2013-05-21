@@ -4,7 +4,7 @@ Name:           distcc
 Summary:	Program to distribute compilation of C or C++ 
 Group:		Development/C
 Version:        2.18.3
-Release:        11
+Release:        12
 License: 	GPL
 URL:		http://distcc.samba.org/
 Source0:        http://distcc.samba.org/ftp/distcc/%{name}-%{version}.tar.bz2
