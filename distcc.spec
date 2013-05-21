@@ -11,7 +11,7 @@ Source0:        http://distcc.samba.org/ftp/distcc/%{name}-%{version}.tar.bz2
 Source1:	xinetd.d-distcc
 Source2:        distccd.init
 Patch0:		distcc-2.18.3-fix-linkage-order.patch
-BuildRequires:	gtk+2-devel popt-devel
+BuildRequires:	pkgconfig(gtk+-2.0) popt-devel
 Requires:	%{name}-client %{name}-daemon
 
 %description
