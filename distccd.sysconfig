@@ -3,5 +3,5 @@ DISTCC_HOSTS=localhost
 DISTCC_LOG=/var/log/distccd.log
 DISTCC_VERBOSE=1
 TMPDIR=/var/lib/distccd
-IP_ALLOW=127.0.0.1
+IP_ALLOW="127.0.0.1"
 USER=distccd
