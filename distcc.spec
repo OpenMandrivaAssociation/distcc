@@ -17,11 +17,8 @@ Source5:	distcc.csh
 Source6:	distcc.sysconfig
 Patch0:		distcc-3.2rc1-logrotate-mdkconf.patch
 Patch1:		distcc-3.2rc1-desktop-utf8.patch
-BuildRequires:	pkgconfig(gtk+-x11-2.0) pkgconfig(popt)
-BuildRequires:	pkgconfig(libgnomeui-2.0) pkgconfig(libgnome-2.0)
-BuildRequires:	pkgconfig(pango)
-BuildRequires:	pkgconfig(python2) pkgconfig(avahi-client)
-BuildRequires:	krb5-devel
+BuildRequires:	pkgconfig(avahi-client) pkgconfig(popt)
+BuildRequires:	pkgconfig(python2) krb5-devel
 Requires:	%{name}-client %{name}-daemon
 
 %description
@@ -121,7 +118,8 @@ nodes of the cluster.
 %package	gnome-monitor
 Group:		Monitoring
 Requires:	%{name}-client
-Buildrequires:	libglade2.0-devel libgnome2-devel libgnomeui2-devel
+BuildRequires:	pkgconfig(gtk+-x11-2.0) pkgconfig(pango)
+BuildRequires:	pkgconfig(libgnomeui-2.0) pkgconfig(libgnome-2.0)
 Summary:	Program to monitor distibuted compilation of distcc
 
 %description	gnome-monitor
