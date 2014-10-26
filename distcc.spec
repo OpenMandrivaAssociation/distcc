@@ -14,7 +14,7 @@ Source2:        distccd.service
 Source3:	xinetd.d-distcc
 Source4:	distcc.sh
 Source5:	distcc.csh
-Source6:	distcc.sysconfig
+Source6:	distccd.sysconfig
 Patch0:		distcc-3.2rc1-logrotate-mdkconf.patch
 Patch1:		distcc-3.2rc1-desktop-utf8.patch
 BuildRequires:	pkgconfig(avahi-client) pkgconfig(popt)
@@ -158,7 +158,7 @@ install -p -m644 %{SOURCE2} -D %{buildroot}%{_unitdir}/distccd.service
 install -p -m644 %{SOURCE3} -D %{buildroot}%{_sysconfdir}/xinetd.d/%{name}
 install -p -m644 %{SOURCE4} -D %{buildroot}%{_sysconfdir}/profile.d/%{name}.sh
 install -p -m644 %{SOURCE5} -D %{buildroot}%{_sysconfdir}/profile.d/%{name}.csh
-install -p -m644 %{SOURCE6} -D %{buildroot}%{_sysconfdir}/sysconfig/%{name}
+install -p -m644 %{SOURCE6} -D %{buildroot}%{_sysconfdir}/sysconfig/distccd
 install -p -m644 contrib/redhat/logrotate -D %{buildroot}%{_sysconfdir}/logrotate.d/distccd
 
 rm -r %{buildroot}%{_docdir}/%{name}
