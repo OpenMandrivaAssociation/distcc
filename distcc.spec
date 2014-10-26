@@ -6,7 +6,7 @@ Group:		Development/C
 Version:        2.18.3
 Release:        12
 License: 	GPL
-URL:		http://distcc.samba.org/
+URL:		https://code.google.com/p/distcc/
 Source0:        http://distcc.samba.org/ftp/distcc/%{name}-%{version}.tar.bz2
 Source1:	xinetd.d-distcc
 Source2:        distccd.init
