@@ -237,7 +237,7 @@ service xinetd condrestart
 %files daemon-standalone
 %{_sysconfdir}/profile.d/%{name}.*sh
 %{_unitdir}/distccd.service
-%config(noreplace) %{_sysconfdir}/sysconfig/%{name}
+%config(noreplace) %{_sysconfdir}/sysconfig/distccd
 
 %files daemon-xinetd
 %config(noreplace) %{_sysconfdir}/xinetd.d/%{name}
