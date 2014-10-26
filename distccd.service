@@ -4,8 +4,9 @@ After=network.target
 
 [Service]
 User=distccd
+PIDFile=/var/run/distccd.pid
 EnvironmentFile=-/etc/sysconfig/distccd
-ExecStart=/usr/bin/distccd --verbose --no-detach --daemon --allow $IP_ALLOW --log-file=$DISTCC_LOG $OPTIONS
+ExecStart=/usr/bin/distccd --verbose --no-detach --daemon --allow $IP_ALLOW --log-file $DISTCC_LOG $OPTIONS
 
 [Install]
 WantedBy=multi-user.target
