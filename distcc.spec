@@ -172,6 +172,7 @@ ln -s %{_bindir}/%{name} %{buildroot}%{masqdir}/g++
 ln -s %{_bindir}/%{name} %{buildroot}%{masqdir}/c++
 ln -s %{_bindir}/%{name} %{buildroot}%{masqdir}/%{_target_platform}-gcc
 ln -s %{_bindir}/%{name} %{buildroot}%{masqdir}/%{_target_platform}-g++
+ln -s %{_bindir}/%{name} %{buildroot}%{masqdir}/clang
 
 mkdir -p %{buildroot}%{_logdir}
 touch %{buildroot}%{_logdir}/distccd.log
