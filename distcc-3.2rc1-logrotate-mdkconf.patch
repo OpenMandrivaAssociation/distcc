@@ -1,0 +1,9 @@
+--- distcc-3.2rc1/contrib/redhat/logrotate~	2014-10-26 11:48:48.801736259 +0100
++++ distcc-3.2rc1/contrib/redhat/logrotate	2014-10-26 11:48:50.058426508 +0100
+@@ -2,4 +2,6 @@
+         missingok
+         copytruncate
+         notifempty
++        monthly
++        compress
+ }

@@ -1,0 +1,14 @@
+--- distcc-3.2rc1/gnome/distccmon-gnome.desktop.utf8~	2014-10-26 12:24:55.649063435 +0100
++++ distcc-3.2rc1/gnome/distccmon-gnome.desktop	2014-10-26 12:25:13.172725383 +0100
+@@ -3,9 +3,9 @@ Version=0.9.4
+ Encoding=UTF-8
+ Exec=distccmon-gnome
+ Name=distcc monitor
+-Name[sv]=distcc övervakare
++Name[sv]=distcc Ã¶vervakare
+ GenericName=Distributed Compile Monitor
+-GenericName[sv]=Distribuerad kompilerings-övervakare
++GenericName[sv]=Distribuerad kompilerings-Ã¶vervakare
+ Comment=Graphical view of distributed compile tasks
+ Comment[sv]=Grafisk vy av distribuerade kompileringsuppgifter
+ Icon=distccmon-gnome-icon.png

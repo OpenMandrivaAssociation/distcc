@@ -1,17 +1,27 @@
-%define masqdir %{_libdir}/%{name}/bin
+%define masqdir %{_libexecdir}/%{name}/bin
+%define	prerel	rc1
 
 Name:           distcc
 Summary:	Program to distribute compilation of C or C++ 
 Group:		Development/C
-Version:        2.18.3
-Release:        12
-License: 	GPL
+Version:        3.2
+Release:        %{?prerel:0.%{prerel}.}1
+License: 	GPLv2+
 URL:		https://code.google.com/p/distcc/
-Source0:        http://distcc.samba.org/ftp/distcc/%{name}-%{version}.tar.bz2
-Source1:	xinetd.d-distcc
-Source2:        distccd.init
-Patch0:		distcc-2.18.3-fix-linkage-order.patch
-BuildRequires:	pkgconfig(gtk+-2.0) popt-devel
+Source0:        http://distcc.googlecode.com/files/%{name}-%{version}%{?prerel}.tar.bz2
+Source1:	hosts.sample
+Source2:        distccd.service
+Source3:	xinetd.d-distcc
+Source4:	distcc.sh
+Source5:	distcc.csh
+Source6:	distcc.sysconfig
+Patch0:		distcc-3.2rc1-logrotate-mdkconf.patch
+Patch1:		distcc-3.2rc1-desktop-utf8.patch
+BuildRequires:	pkgconfig(gtk+-x11-2.0) pkgconfig(popt)
+BuildRequires:	pkgconfig(libgnomeui-2.0) pkgconfig(libgnome-2.0)
+BuildRequires:	pkgconfig(pango)
+BuildRequires:	pkgconfig(python2) pkgconfig(avahi-client)
+BuildRequires:	krb5-devel
 Requires:	%{name}-client %{name}-daemon
 
 %description
@@ -72,7 +82,7 @@ slaves nodes of the cluster.
 Group:		System/Servers
 Requires: 	gcc-c++
 Summary:	Program to distribute compilation of C or C++
-Requires(post):		rpm-helper
+Requires(post):	rpm-helper
 Requires(postun):		rpm-helper
 Obsoletes:      %{name}-daemon
 Provides:       %{name}-daemon
@@ -92,8 +102,8 @@ slaves nodes of the cluster.
 Group:		System/Servers
 Requires: 	gcc-c++ xinetd
 Summary:	Program to distribute compilation of C or C++
-Requires(pre):		rpm-helper
-Requires(post):		rpm-helper
+Requires(pre):	rpm-helper
+Requires(post):	rpm-helper
 Obsoletes:      %{name}-daemon
 Provides:       %{name}-daemon
 Requires:	%{name}-daemon-common
@@ -123,411 +133,109 @@ two or more times faster than a local compile.
 This package contain a graphical version of the distcc monitor.
 
 %prep
-%setup -q
-%patch0 -p1 -b .link_order~
+%setup -q -n %{name}-%{version}%{?prerel}
+%patch0 -p1 -b .logrotate~
+%patch1 -p1 -b .utf8~
+chmod o+r -R .
 
 %build
-%configure2_5x --enable-gnome --with-gnome
+%configure	--with-gnome \
+		--with-avahi \
+		--with-auth \
+		--disable-Werror
 %make
 
-cat <<EOF > %{name}.sh
-if [ -f %{_sysconfdir}/sysconfig/ccache ]; then
-    . %{_sysconfdir}/sysconfig/ccache
-fi
-
-if [ -f %{_sysconfdir}/sysconfig/distcc ]; then
-    . %{_sysconfdir}/sysconfig/distcc
-fi
-
-if [ "\$USE_DISTCC_DEFAULT" = "yes" ]; then
-  if [ "\$USE_CCACHE_DEFAULT" = "yes" ]; then
-      if [ -z "\$CCACHE_PREFIX" ]; then
-          export CCACHE_PREFIX=%{_bindir}/distcc
-      fi
-  else
-      export PATH=%{masqdir}:\$PATH
-  fi
-fi
-EOF
-cat <<EOF > %{name}.csh
-if ( -f %{_sysconfdir}/sysconfig/ccache ) then
-    eval \`sed -n 's/^\([^#]*\)=\([^#]*\)/set \1=\2;/p' < %{_sysconfdir}/sysconfig/ccache\`
-endif
-
-if ( -f %{_sysconfdir}/sysconfig/distcc ) then
-    eval \`sed -n 's/^\([^#]*\)=\([^#]*\)/set \1=\2;/p' < %{_sysconfdir}/sysconfig/distcc\`
-endif
-
-if (\$?USE_DISTCC_DEFAULT) then
-  if ( "\$USE_DISTCC_DEFAULT" == "yes" ) then
-    if (\$?USE_CCACHE_DEFAULT) then
-
-  if ( "\$USE_CCACHE_DEFAULT" == "yes" ) then
-      if ( "\$path" !~ *%{_libdir}/ccache/bin* ) then
-          setenv CCACHE_PREFIX %{_bindir}/distcc
-      endif
-  else
-      set path = ( %{masqdir} \$path )
-  endif
-    else
-      set path = ( %{masqdir} \$path)
-    endif
-  endif
-endif
-EOF
-
-cat <<EOF > %{name}.sysconfig
-USE_DISTCC_DEFAULT=yes
-DISTCC_HOSTS=localhost
-DISTCC_LOG=%{_var}/log/%{name}d.log
-DISTCC_VERBOSE=1
-TMPDIR=%{_var}/lib/%{name}d
-IP_ALLOW=127.0.0.1
-EOF
-
-cat << EOF > %{name}.logrotate
-%{_var}/log/%{name}d.log {
-    missingok
-    monthly
-    compress
-}
-EOF
-
 %install
-rm -rf $RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT%{_mandir}/man1
-%{makeinstall}
-install -m644 %{SOURCE1} -D $RPM_BUILD_ROOT%{_sysconfdir}/xinetd.d/%{name}
-rm -rf $RPM_BUILD_ROOT%{_docdir}/%{name}
+%makeinstall_std
 
-mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
-echo localhost > $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/hosts
+# Move desktop & icon files to right directories
+mkdir -p %{buildroot}%{_datadir}/applications
+mv %{buildroot}%{_datadir}/%{name}/*.desktop %{buildroot}%{_datadir}/applications/
+mkdir -p %{buildroot}%{_iconsdir}
+mv %{buildroot}%{_datadir}/%{name}/*.png %{buildroot}%{_iconsdir}
 
-mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/lib/%{name}d
+install -p -m644 %{SOURCE1} -D %{buildroot}%{_sysconfdir}/%{name}/hosts
+install -p -m644 %{SOURCE2} -D %{buildroot}%{_unitdir}/distccd.service
+install -p -m644 %{SOURCE3} -D %{buildroot}%{_sysconfdir}/xinetd.d/%{name}
+install -p -m644 %{SOURCE4} -D %{buildroot}%{_sysconfdir}/profile.d/%{name}.sh
+install -p -m644 %{SOURCE5} -D %{buildroot}%{_sysconfdir}/profile.d/%{name}.csh
+install -p -m644 %{SOURCE6} -D %{buildroot}%{_sysconfdir}/sysconfig/%{name}
+install -p -m644 contrib/redhat/logrotate -D %{buildroot}%{_sysconfdir}/logrotate.d/distccd
 
-mkdir -p $RPM_BUILD_ROOT%{masqdir}
-ln -s %{_bindir}/%{name} $RPM_BUILD_ROOT%{masqdir}/gcc
-ln -s %{_bindir}/%{name} $RPM_BUILD_ROOT%{masqdir}/cc
-ln -s %{_bindir}/%{name} $RPM_BUILD_ROOT%{masqdir}/g++
-ln -s %{_bindir}/%{name} $RPM_BUILD_ROOT%{masqdir}/c++
-ln -s %{_bindir}/%{name} $RPM_BUILD_ROOT%{masqdir}/%{_target_platform}-gcc
+rm -r %{buildroot}%{_docdir}/%{name}
 
-mkdir -p $RPM_BUILD_ROOT/%{_datadir}/applications/
-cat << EOF > %buildroot%{_datadir}/applications/mandriva-%{name}.desktop
-[Desktop Entry]
-Name=Distcc monitor
-Comment=Distcc monitor
-Exec=distccmon-gnome
-Icon=%{name}
-Terminal=false
-Type=Application
-Categories=System;X-MandrivaLinux-System-Monitoring;
-EOF
+mkdir -p %{buildroot}%{_localstatedir}/lib/distccd
 
-install -m755 %{name}.sh -D $RPM_BUILD_ROOT%{_sysconfdir}/profile.d/%{name}.sh
-install -m755 %{name}.csh -D $RPM_BUILD_ROOT%{_sysconfdir}/profile.d/%{name}.csh
-install -m644 %{name}.sysconfig -D $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/%{name}
-install -m755 %{SOURCE2} -D %{buildroot}%{_initrddir}/%{name}d
+mkdir -p %{buildroot}%{masqdir}
+ln -s %{_bindir}/%{name} %{buildroot}%{masqdir}/gcc
+ln -s %{_bindir}/%{name} %{buildroot}%{masqdir}/cc
+ln -s %{_bindir}/%{name} %{buildroot}%{masqdir}/g++
+ln -s %{_bindir}/%{name} %{buildroot}%{masqdir}/c++
+ln -s %{_bindir}/%{name} %{buildroot}%{masqdir}/%{_target_platform}-gcc
+ln -s %{_bindir}/%{name} %{buildroot}%{masqdir}/%{_target_platform}-g++
 
-mkdir -p $RPM_BUILD_ROOT%{_var}/log
-touch $RPM_BUILD_ROOT%{_var}/log/%{name}d.log
-
-install -m644 %{name}.logrotate -D $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/%{name}d
+mkdir -p %{buildroot}%{_logdir}
+touch %{buildroot}%{_logdir}/distccd.log
 
 %pre daemon-common
-%_pre_useradd %{name}d %{_localstatedir}/lib/%{name}d /sbin/nologin
-%create_ghostfile %{_var}/log/%{name}d.log distccd adm 0644
+%_pre_useradd distccd %{_localstatedir}/lib/distccd /sbin/nologin
+%create_ghostfile %{_logdir}/distccd.log distccd adm 0644
 
 %post daemon-standalone
-%_post_service %{name}d
+%_post_service distccd
 
 %preun daemon-standalone
-%_preun_service %{name}d
+%_preun_service distccd
 
 
 %post daemon-xinetd
-# check that /etc/services has been already patched with ditscc port
-CHECK_PORT=`grep distcc %{_sysconfdir}/services`
-if [ -z "$CHECK_PORT" ]; then
-	echo " " >> %{_sysconfdir}/services
-	echo "distcc            3632/tcp # distcc port for daemon" >> %{_sysconfdir}/services
-	else
-	perl -pi -e 's/distcc.*/distcc                3632\/tcp \# distcc port for daemon/' %{_sysconfdir}/services
-fi
-
-# restarting xinetd service
 service xinetd condrestart
 
 %postun daemon-common
-%_postun_userdel %{name}d
+%_postun_userdel distccd
 
 %postun daemon-xinetd
-# restarting xinetd service
 service xinetd condrestart
-
-%if %mdkversion < 200900
-%post gnome-monitor
-%update_menus
-%endif
-
-%if %mdkversion < 200900
-%postun gnome-monitor
-%clean_menus
-%endif
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 # (misc) here to generate a empty rpm, who require the 2 others
 %files 
 
 %files client
-%defattr(644,root,root,755)
-%doc README* INSTALL AUTHORS doc/*
-%{_mandir}/man1/%{name}.1*
+%doc README* AUTHORS doc/*
+%{_mandir}/man1/distcc.1*
 %dir %{_sysconfdir}/%{name}
-%config(noreplace) %{_sysconfdir}/%{name}/hosts
-%defattr(755,root,root,755)
-%{_bindir}/%{name}
-%{_bindir}/%{name}mon-text
-%{_mandir}/man1/%{name}mon-text.*
+%config(noreplace) %{_sysconfdir}/distcc/hosts
+%{_bindir}/distcc
+%{_bindir}/distccmon-text
+%{_bindir}/lsdistcc
+%{_bindir}/pump
+%{_mandir}/man1/distccmon-text.1*
+%{_mandir}/man1/include_server.1*
+%{_mandir}/man1/pump.1*
+
 
 %files masq
-%defattr(644,root,root,755)
-%attr(0755,root,root) %{masqdir}
+%{masqdir}
 
 %files gnome-monitor
-%defattr(-,root,root)
-%{_datadir}/applications/mandriva-%{name}.desktop
-%{_bindir}/%{name}mon-gnome
-%{_datadir}/%{name}/*.png
-%{_datadir}/%{name}/*.desktop
-#%_datadir/*.glade*
+%{_datadir}/applications/distccmon-gnome.desktop
+%{_iconsdir}/distccmon-gnome-icon.png
+%{_bindir}/distccmon-gnome
 
 %files daemon-common
-%defattr(-,root,root)
-%{_bindir}/%{name}d*
-%{_mandir}/man1/%{name}d.1*
-%defattr(-,distccd,distccd)
-%{_localstatedir}/lib/%{name}d
-%attr(0640,distccd,adm) %ghost %{_var}/log/%{name}d.log
-%config(noreplace) %{_sysconfdir}/logrotate.d/%{name}d
+%{_bindir}/distccd*
+%{_mandir}/man1/distccd.1*
+%attr(-,distccd,distccd) %{_localstatedir}/lib/distccd
+%attr(0640,distccd,adm) %ghost %{_logdir}/distccd.log
+%config(noreplace) %{_sysconfdir}/logrotate.d/distccd
+%config(noreplace) %{_sysconfdir}/default/distcc
+%config(noreplace) %{_sysconfdir}/distcc/*allow*
+%{python_sitearch}/include_server*
 
 %files daemon-standalone
-%defattr(-,root,root)
-%config(noreplace) %{_sysconfdir}/profile.d/%{name}.*sh
-%config(noreplace) %{_initrddir}/%{name}d
+%{_sysconfdir}/profile.d/%{name}.*sh
+%{_unitdir}/distccd.service
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 
 %files daemon-xinetd
-%defattr(-,root,root)
 %config(noreplace) %{_sysconfdir}/xinetd.d/%{name}
-
-
-
-%changelog
-* Fri Dec 18 2009 Per Øyvind Karlsen <peroyvind@mandriva.org> 2.18.3-9mdv2010.1
-+ Revision: 479849
-- fix link order issue (P1)
-- fix #56460 & #47512:
-  	o make initscript lsb compliant
-  	o fix TMPDIR set
-  	o fix syntax errors in profile.d script
-
-  + Thierry Vignaud <tvignaud@mandriva.com>
-    - rebuild
-
-  + Pixel <pixel@mandriva.com>
-    - rpm filetriggers deprecates update_menus/update_scrollkeeper/update_mime_database/update_icon_cache/update_desktop_database/post_install_gconf_schemas
-    - adapt to %%_localstatedir now being /var instead of /var/lib (#22312)
-
-  + Oden Eriksson <oeriksson@mandriva.com>
-    - bump release
-    - fix #41206 (Bad /etc/profile.d/distcc.csh script : some syntax errors)
-
-* Fri Dec 21 2007 Olivier Blin <oblin@mandriva.com> 2.18.3-5mdv2008.1
-+ Revision: 136365
-- restore BuildRoot
-
-  + Thierry Vignaud <tvignaud@mandriva.com>
-    - kill re-definition of %%buildroot on Pixel's request
-
-* Tue Sep 18 2007 Guillaume Rousse <guillomovitch@mandriva.org> 2.18.3-5mdv2008.0
-+ Revision: 89592
-- rebuild
-
-  + Thierry Vignaud <tvignaud@mandriva.com>
-    - kill desktop-file-validate's error: string list key "Categories" in group "Desktop Entry" does not have a semicolon (";") as trailing character
-    - kill desktop-file-validate's 'warning: key "Encoding" in group "Desktop Entry" is deprecated'
-
-* Thu Aug 23 2007 Thierry Vignaud <tvignaud@mandriva.com> 2.18.3-4mdv2008.0
-+ Revision: 70048
-- convert menu to XDG
-- convert prereq
-
-
-* Wed Dec 28 2005 Erwan Velu <erwan@seanodes.com> 2.18.3-2mdk
-- Rebuild
-
-* Sat Dec 25 2004 Per Øyvind Karlsen <peroyvind@linux-mandrake.com> 2.18.3-1mdk
-- 2.8.13
-- fix non-conffile-in-etc
-- fix non-ghost-file
-
-* Sat Dec 25 2004 Per Øyvind Karlsen <peroyvind@linux-mandrake.com> 2.18.2-2mdk
-- fix PATH in %%{_sysconfdir}/profile.d/distcc.sh (from Eskild Hustvedt)
-- cleanups
-
-* Fri Nov 12 2004 Per Øyvind Karlsen <peroyvind@linux-mandrake.com> 2.18.2-1mdk
-- 2.18.2
-
-* Wed Oct 27 2004 Frederic Crozat <fcrozat@mandrakesoft.com> 2.18-3mdk
-- Update source2 to not restrict connection for xinetd mode, otherwise
-  nobody can connect to the daemon (and ACL are handled by xinetd in that
-  case anyway)
-
-* Sun Oct 24 2004 David Walluck <walluck@mandrake.org> 2.18-2mdk
-- add standalone service that works in conjunction with ccache
-
-* Tue Oct 12 2004 Lenny Cartier <lenny@mandrakesoft.com> 2.18-1mdk
-- 2.18
-
-* Fri Sep 10 2004 Lenny Cartier <lenny@mandrakesoft.com> 2.17-2mdk
-- from Richard Houser <rick@divinesymphony.net> : 
-	- New masq directory in /usr/lib/distcc/bin, just add to the start of your path
-
-* Tue Aug 03 2004 Lenny Cartier <lenny@mandrakesoft.com> 2.17-1mdk
-- 2.17
-
-* Mon Jul 19 2004 Lenny Cartier <lenny@mandrakesoft.com> 2.16-1mdk
-- 2.16
-
-* Mon May 17 2004 Antoine Ginies <aginies@n2.mandrakesoft.com> 2.14-2mdk
-- remove verbose log in xinetd
-
-* Thu May 06 2004 <lenny@mandrakesoft.com> 2.14-1mdk
-- New release 2.14
-
-* Tue Apr 06 2004 Erwan Velu <erwan@mandrakesoft.com> 2.13-1mdk
-- 2.13
-
-* Fri Jan 09 2004 Lenny Cartier <lenny@mandrakesoft.com> 2.12.1-1mdk
-- 2.12.1
-- add distccmon-text manpage
-
-* Sun Dec 21 2003 Per Øyvind Karlsen <peroyvind@linux-mandrake.com> 2.12-2mdk
-- run under own user
-- spec cosmetics
-- fix buildrequires (lib64..)
-- define TMPDIR=/tmp (fixes #6225)
-
-* Fri Dec 19 2003 Michael Scherer <misc@mandrake.org> 2.12-1mdk
-- 2.12
-
-* Thu Oct 23 2003 Lenny Cartier <lenny@mandrakesoft.com> 2.11.2-1mdk
-- 2.11.2
-
-* Mon Sep 29 2003 Antoine Ginies <aginies@mandrakesoft.com> 2.11-2mdk
-- fix Buildrequires
-
-* Tue Sep 23 2003 Lenny Cartier <lenny@mandrakesoft.com> 2.11-1mdk
-- 2.11
-- add some files for gnome-mono (but place is not satisfying)
-
-* Mon Sep 01 2003 Michael Scherer <scherer.michael@free.fr> 2.10.1-3mdk 
-- fix last changelog
-- BuildRequires libgtk+2.0_0-devel
-- added a package distcc to ease the upgrade
-- split gtk-monitor from client
-- use service xinetd condrestart
-
-* Thu Aug 14 2003 Lenny Cartier <lenny@mandrakesoft.com> 2.10.1-2mdk
-- following the Andre Duclos idea, split the package
-- enable gnome monitor
-- add menu entry
-
-* Wed Aug 13 2003 Lenny Cartier <lenny@mandrakesoft.com> 2.10.1-1mdk
-- 2.10
-
-* Wed Jul 23 2003 Olivier Thauvin <thauvin@aerov.jussieu.fr> 2.9-1mdk
-- 2.9 (\o/ packaged before Per Øyvind)
-
-* Wed Jul 09 2003 Per Øyvind Karlsen <peroyvind@sintrax.net> 2.8-1mdk
-- 2.8
-- drop Prefix tag
-
-* Fri Jun 27 2003 Lenny Cartier <lenny@mandrakesoft.com> 2.7.1-1mdk
-- 2.7.1
-
-* Fri Jun 06 2003 Lenny Cartier <lenny@mandrakesoft.com> 2.5.1-1mdk
-- 2.5.1
-
-* Wed Jun 04 2003 Per Øyvind Karlsen <peroyvind@sintrax.net> 2.5-3mdk
-- add confdir and configfile for hosts
-
-* Tue Jun 03 2003 Per Øyvind Karlsen <peroyvind@sintrax.net> 2.5-2mdk
-- spec file fixes and cleanups
-
-* Wed May 28 2003 Lenny Cartier <lenny@mandrakesoft.com> 2.5-1mdk
-- 2.5
-
-* Mon May 05 2003 Lenny Cartier <lenny@mandrakesoft.com> 2.2-1mdk
-- 2.2
-
-* Mon Mar 31 2003 Lenny Cartier <lenny@mandrakesoft.com> 2.0.1-1mdk
-- 2.0.1
-- remove infopages post & postun
-- minor clean spec
-
-* Mon Mar 24 2003 Lenny Cartier <lenny@mandrakesoft.com> 1.2.3-1mdk
-- 1.2.3
-
-* Thu Feb 27 2003 Lenny Cartier <lenny@mandrakesoft.com> 1.2.2-1mdk
-- 1.2.2
-
-* Sat Feb 22 2003 Antoine Ginies <aginies@mandrakesoft.com> 1.2-1mdk
-- new release
-
-* Tue Jan 28 2003 Antoine Ginies <aginies@mandrakesoft.com> 1.1-1mdk
-- new release 1.1
-
-* Thu Jan 16 2003 Antoine Ginies <aginies@mandrakesoft.com> 1.0-1mdk
-- release 1.0
-
-* Thu Dec 12 2002 Antoine Ginies <aginies@mandrakesoft.com> 0.15-2mdk
-- correct to adjust to new default port 3632
-
-* Thu Dec 12 2002 Antoine Ginies <aginies@mandrakesoft.com> 0.15-1mdk
-- new release 0.15
-
-* Tue Dec 03 2002 Antoine Ginies <aginies@mandrakesoft.com> 0.14-1mdk
-- new release 0.14
-
-* Tue Nov 12 2002 Antoine Ginies <aginies@mandrakesoft.com> 0.13-1mdk
-- release 0.13
-
-* Tue Oct 08 2002 Antoine Ginies <aginies@mandrakesoft.com> 0.12-3mdk
-- correct /etc/services
-
-* Mon Oct 07 2002 Antoine Ginies <aginies@mandrakesoft.com> 0.12-2mdk
-- include distccd in xinetd service
-- add disttc port in /etc/services
-
-* Mon Oct 07 2002 Antoine Ginies <aginies@mandrakesoft.com> 0.12-1mdk
-- release 0.12
-
-* Sun Sep 29 2002 Antoine Ginies <aginies@mandrakesoft.com> 0.11.0-1mdk
-- sorry for overwritting first spec. 
-- release 0.11
-
-* Mon Sep 16 2002 Lenny Cartier <lenny@mandrakesoft.com> 0.10.1-1mdk
-- from Austin Acton <aacton@yorku.ca> :
-- update to 0.10.1
-
-* Thu Aug 22 2002 Lenny Cartier <lenny@mandrakesoft.com> 0.8-1mdk
-- from Austin Acton <aacton@yorku.ca> :
-- update to 0.8
-
-* Tue Aug 06 2002 Xavier Granier <xavier.granier@laposte.net> 0.6-1mdk
-- First packaging
-
