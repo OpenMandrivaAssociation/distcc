@@ -1,5 +1,6 @@
 %define masqdir %{_libexecdir}/%{name}/bin
 %define	prerel	rc1
+%define	_disable_ld_no_undefined 1
 
 Name:           distcc
 Summary:	Program to distribute compilation of C or C++ 
