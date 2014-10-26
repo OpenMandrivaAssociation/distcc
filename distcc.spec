@@ -141,7 +141,8 @@ chmod o+r -R .
 		--with-avahi \
 		--with-auth \
 		--disable-Werror
-%make
+# XXX: for some reason --no-undefined causes problem when linking with python3...
+LDSHARED='%{__cc} -pthread -shared' %make
 
 %install
 %makeinstall_std
