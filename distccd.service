@@ -3,9 +3,9 @@ Description=Distccd A Distributed Compilation Server
 After=network.target
 
 [Service]
-User=nobody
+User=distccd
 EnvironmentFile=-/etc/sysconfig/distccd
-ExecStart=/usr/bin/distccd --verbose --no-detach --daemon $OPTIONS
+ExecStart=/usr/bin/distccd --verbose --no-detach --daemon --allow $IP_ALLOW $OPTIONS
 
 [Install]
 WantedBy=multi-user.target
