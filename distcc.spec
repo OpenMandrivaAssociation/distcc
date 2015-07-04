@@ -6,10 +6,10 @@ Name:           distcc
 Summary:	Program to distribute compilation of C or C++ 
 Group:		Development/C
 Version:        3.2
-Release:        %{?prerel:0.%{prerel}.}1
+Release:        %{?prerel:0.%{prerel}.}2
 License: 	GPLv2+
 URL:		http://distcc.org
-Source0:        https://github.com/distcc/distcc/archive/%{name}-%{version}%{?prerel}.tar.gz
+Source0:        http://distcc.googlecode.com/files/%{name}-%{version}%{?prerel}.tar.xz
 Source1:	hosts.sample
 Source2:        distccd.service
 Source3:	xinetd.d-distcc
