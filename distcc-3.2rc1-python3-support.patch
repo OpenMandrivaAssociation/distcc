@@ -1,0 +1,248 @@
+--- distcc-3.2rc1/bench/statistics.py.python3~	2015-07-04 02:20:40.000000000 +0200
++++ distcc-3.2rc1/bench/statistics.py	2015-07-04 02:46:11.721397119 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/env python2.2
++#! /usr/bin/env python3
+ 
+ # benchmark -- automated system for testing distcc correctness
+ # and performance on various source trees.
+--- distcc-3.2rc1/configure.ac.python3~	2015-07-04 02:46:11.731397111 +0200
++++ distcc-3.2rc1/configure.ac	2015-07-04 02:46:51.255367868 +0200
+@@ -250,7 +250,7 @@ AC_PROG_INSTALL
+ #
+ # NB: Cannot use AC_CONFIG_LIBOBJ_DIR here, because it's not present
+ # in autoconf 2.53.
+-AC_PATH_PROGS(PYTHON, [python2.7 python-2.7 python2.6 python-2.6 python2.5 python-2.5 python2.4 python-2.4 python])
++AC_PATH_PROGS(PYTHON, [python3])
+ AC_ARG_VAR(PYTHON, [Python interpreter])
+ # Python 1 doesn't even support -V
+ if ! "$PYTHON" -V 2>&1 | grep "^Python" >/dev/null; then
+--- distcc-3.2rc1/include_server/basics.py.python3~	2015-07-04 02:20:40.000000000 +0200
++++ distcc-3.2rc1/include_server/basics.py	2015-07-04 02:46:11.727397114 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python2.4
++#!/usr/bin/python3
+ #
+ # Copyright 2007 Google Inc.
+ #
+--- distcc-3.2rc1/include_server/basics_test.py.python3~	2015-07-04 02:20:40.000000000 +0200
++++ distcc-3.2rc1/include_server/basics_test.py	2015-07-04 02:46:11.725397115 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/python2.4
++#! /usr/bin/python3
+ 
+ # Copyright 2007 Google Inc.
+ #
+--- distcc-3.2rc1/include_server/cache_basics.py.python3~	2015-07-04 02:20:40.000000000 +0200
++++ distcc-3.2rc1/include_server/cache_basics.py	2015-07-04 02:46:11.728397113 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/python2.4
++#! /usr/bin/python3
+ 
+ # Copyright 2007 Google Inc.
+ #
+--- distcc-3.2rc1/include_server/c_extensions_test.py.python3~	2015-07-04 02:20:40.000000000 +0200
++++ distcc-3.2rc1/include_server/c_extensions_test.py	2015-07-04 02:46:11.724397117 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python2.4
++#!/usr/bin/python3
+ 
+ # Copyright 2007 Google Inc.
+ #
+--- distcc-3.2rc1/include_server/compiler_defaults.py.python3~	2015-07-04 02:20:40.000000000 +0200
++++ distcc-3.2rc1/include_server/compiler_defaults.py	2015-07-04 02:46:11.728397113 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/python2.4
++#! /usr/bin/python3
+ 
+ # Copyright 2007 Google Inc.
+ #
+--- distcc-3.2rc1/include_server/compress_files.py.python3~	2015-07-04 02:20:40.000000000 +0200
++++ distcc-3.2rc1/include_server/compress_files.py	2015-07-04 02:46:11.723397117 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/python2.4
++#! /usr/bin/python3
+ 
+ # Copyright 2007 Google Inc.
+ #
+--- distcc-3.2rc1/include_server/include_analyzer_memoizing_node.py.python3~	2015-07-04 02:20:40.000000000 +0200
++++ distcc-3.2rc1/include_server/include_analyzer_memoizing_node.py	2015-07-04 02:46:11.724397117 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/python2.4
++#! /usr/bin/python3
+ 
+ # Copyright 2007 Google Inc.
+ #
+--- distcc-3.2rc1/include_server/include_analyzer_memoizing_node_test.py.python3~	2015-07-04 02:20:40.000000000 +0200
++++ distcc-3.2rc1/include_server/include_analyzer_memoizing_node_test.py	2015-07-04 02:46:11.728397113 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/python2.4 
++#! /usr/bin/python3
+ 
+ # Copyright 2007 Google Inc.
+ #
+--- distcc-3.2rc1/include_server/include_analyzer.py.python3~	2015-07-04 02:20:40.000000000 +0200
++++ distcc-3.2rc1/include_server/include_analyzer.py	2015-07-04 02:46:11.723397117 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/python2.4
++#! /usr/bin/python3
+ 
+ # Copyright 2007 Google Inc.
+ #
+--- distcc-3.2rc1/include_server/include_analyzer_test.py.python3~	2015-07-04 02:20:40.000000000 +0200
++++ distcc-3.2rc1/include_server/include_analyzer_test.py	2015-07-04 02:46:11.726397115 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/python2.4
++#! /usr/bin/python3
+ 
+ # Copyright 2007 Google Inc.
+ #
+--- distcc-3.2rc1/include_server/include_server.py.python3~	2015-07-04 02:20:40.000000000 +0200
++++ distcc-3.2rc1/include_server/include_server.py	2015-07-04 02:46:11.727397114 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python2.4
++#!/usr/bin/python3
+ 
+ # Copyright 2007 Google Inc.
+ #
+--- distcc-3.2rc1/include_server/include_server_test.py.python3~	2015-07-04 02:20:40.000000000 +0200
++++ distcc-3.2rc1/include_server/include_server_test.py	2015-07-04 02:46:11.722397118 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python2.4
++#!/usr/bin/python3
+ 
+ # Copyright 2007 Google Inc.
+ #
+--- distcc-3.2rc1/include_server/macro_eval.py.python3~	2015-07-04 02:20:40.000000000 +0200
++++ distcc-3.2rc1/include_server/macro_eval.py	2015-07-04 02:46:11.722397118 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/python2.4
++#! /usr/bin/python3
+ 
+ # Copyright 2007 Google Inc.
+ #
+--- distcc-3.2rc1/include_server/macro_eval_test.py.python3~	2015-07-04 02:20:40.000000000 +0200
++++ distcc-3.2rc1/include_server/macro_eval_test.py	2015-07-04 02:46:11.727397114 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/python2.4
++#! /usr/bin/python3
+ 
+ # Copyright 2007 Google Inc.
+ #
+--- distcc-3.2rc1/include_server/mirror_path.py.python3~	2015-07-04 02:20:40.000000000 +0200
++++ distcc-3.2rc1/include_server/mirror_path.py	2015-07-04 02:46:11.724397117 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python2.4
++#!/usr/bin/python3
+ 
+ # Copyright 2007 Google Inc.
+ #
+--- distcc-3.2rc1/include_server/mirror_path_test.py.python3~	2015-07-04 02:20:40.000000000 +0200
++++ distcc-3.2rc1/include_server/mirror_path_test.py	2015-07-04 02:46:11.723397117 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/python2.4
++#! /usr/bin/python3
+ 
+ # Copyright 2007 Google Inc.
+ #
+--- distcc-3.2rc1/include_server/parse_command.py.python3~	2015-07-04 02:20:40.000000000 +0200
++++ distcc-3.2rc1/include_server/parse_command.py	2015-07-04 02:46:11.726397115 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/python2.4 
++#! /usr/bin/python3
+ 
+ # Copyright 2007 Google Inc.
+ #
+--- distcc-3.2rc1/include_server/parse_command_test.py.python3~	2015-07-04 02:20:40.000000000 +0200
++++ distcc-3.2rc1/include_server/parse_command_test.py	2015-07-04 02:46:11.722397118 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/python2.4
++#! /usr/bin/python3
+ 
+ # Copyright 2007 Google Inc.
+ #
+--- distcc-3.2rc1/include_server/parse_file.py.python3~	2015-07-04 02:20:40.000000000 +0200
++++ distcc-3.2rc1/include_server/parse_file.py	2015-07-04 02:46:11.722397118 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/python2.4
++#! /usr/bin/python3
+ 
+ # Copyright 2007 Google Inc.
+ #
+--- distcc-3.2rc1/include_server/parse_file_test.py.python3~	2015-07-04 02:20:40.000000000 +0200
++++ distcc-3.2rc1/include_server/parse_file_test.py	2015-07-04 02:46:11.725397115 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/python2.4
++#! /usr/bin/python3
+ 
+ # Copyright 2007 Google Inc.
+ #
+--- distcc-3.2rc1/include_server/run.py.python3~	2015-07-04 02:20:40.000000000 +0200
++++ distcc-3.2rc1/include_server/run.py	2015-07-04 02:46:11.726397115 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/python2.4 
++#! /usr/bin/python3
+ 
+ # Copyright 2007 Google Inc.
+ #
+--- distcc-3.2rc1/include_server/setup.py.python3~	2015-07-04 02:20:40.000000000 +0200
++++ distcc-3.2rc1/include_server/setup.py	2015-07-04 02:48:09.438310622 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python2.4
++#!/usr/bin/python3
+ 
+ # Copyright 2007 Google Inc.
+ #
+@@ -103,7 +103,8 @@ cpp_flags_env = os.getenv('CPPFLAGS', ''
+ if not cpp_flags_env:
+   # Don't quit; perhaps the user is asking for help using '--help'.
+   # CPPFLAGS checking.
+-  print >> sys.stderr, 'setup.py: CPPFLAGS must be defined.'
++  print('setup.py: CPPFLAGS must be defined.', file=sys.stderr)
++
+ # CPPFLAGS is passed to us as it's used in the Makefile: a string that the shell
+ # will interpret.  GetInclude uses shlex to do the same kind of interpretation
+ # in order to identify the include directory options.
+@@ -112,7 +113,7 @@ cpp_flags_includes = GetIncludes(cpp_fla
+ # SRCDIR checking.
+ if not os.getenv('SRCDIR'):
+   # Don't quit; perhaps the user is asking for help using '--help'.
+-  print >> sys.stderr, 'setup.py: SRCDIR must be defined.'
++  print('setup.py: SRCDIR must be defined.', file=sys.stderr)
+   srcdir = 'UNDEFINED'
+   srcdir_include_server = 'UNDEFINED'
+ else:
+--- distcc-3.2rc1/include_server/statistics.py.python3~	2015-07-04 02:20:40.000000000 +0200
++++ distcc-3.2rc1/include_server/statistics.py	2015-07-04 02:46:11.723397117 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/python2.4 
++#! /usr/bin/python3
+ #
+ # Copyright 2007 Google Inc.
+ #
+--- distcc-3.2rc1/Makefile.in.python3~	2015-07-04 02:21:35.000000000 +0200
++++ distcc-3.2rc1/Makefile.in	2015-07-04 02:46:11.732397111 +0200
+@@ -585,6 +585,7 @@ include-server:
+ 	  DISTCC_VERSION="$(VERSION)"			\
+ 	  SRCDIR="$(srcdir)"                            \
+ 	  CFLAGS="$(CFLAGS) $(PYTHON_CFLAGS)"           \
++	  PYTHON_CFLAGS="$(PYTHON_CFLAGS)"              \
+ 	  CPPFLAGS="$(CPPFLAGS)"                        \
+ 	  $(INCLUDESERVER_PYTHON) "$(srcdir)/include_server/setup.py" \
+ 	      build 					\
+--- distcc-3.2rc1/test/onetest.py.python3~	2015-07-04 02:20:40.000000000 +0200
++++ distcc-3.2rc1/test/onetest.py	2015-07-04 02:46:11.720397119 +0200
+@@ -1,4 +1,4 @@
+-#!/usr/bin/python2.4
++#!/usr/bin/python3
+ #
+ # Copyright 2007 Google Inc.
+ #
+--- distcc-3.2rc1/test/testdistcc.py.python3~	2015-07-04 02:20:40.000000000 +0200
++++ distcc-3.2rc1/test/testdistcc.py	2015-07-04 02:46:11.721397119 +0200
+@@ -1,4 +1,4 @@
+-#! /usr/bin/env python2.2
++#! /usr/bin/env python3
+ 
+ # Copyright (C) 2002, 2003, 2004 by Martin Pool <mbp@samba.org>
+ # Copyright 2007 Google Inc.

@@ -2,6 +2,9 @@
 %define	prerel	rc1
 %define	_disable_ld_no_undefined 1
 
+%define	__cc	gcc
+%define	__cxx	g++
+
 Name:           distcc
 Summary:	Program to distribute compilation of C or C++ 
 Group:		Development/C
@@ -18,8 +21,9 @@ Source5:	distcc.csh
 Source6:	distccd.sysconfig
 Patch0:		distcc-3.2rc1-logrotate-mdkconf.patch
 Patch1:		distcc-3.2rc1-desktop-utf8.patch
+Patch2:		distcc-3.2rc1-python3-support.patch
 BuildRequires:	pkgconfig(avahi-client) pkgconfig(popt)
-BuildRequires:	pkgconfig(python2) krb5-devel
+BuildRequires:	pkgconfig(python3) krb5-devel
 Requires:	%{name}-client %{name}-daemon
 
 %description
@@ -135,7 +139,9 @@ This package contain a graphical version of the distcc monitor.
 %setup -q -n %{name}-%{version}%{?prerel}
 %patch0 -p1 -b .logrotate~
 %patch1 -p1 -b .utf8~
+%patch2 -p1 -b .python3~
 chmod o+r -R .
+autoreconf -fiv
 
 %build
 %configure	--with-gnome \
@@ -143,7 +149,7 @@ chmod o+r -R .
 		--with-auth \
 		--disable-Werror
 # XXX: for some reason --no-undefined causes problem when linking with python3...
-LDSHARED='%{__cc} -pthread -shared' %make
+LDSHARED='%{__cc} -pthread -shared' %make CC=clang CXX=clang++
 
 %install
 %makeinstall_std
@@ -213,8 +219,8 @@ service xinetd condrestart
 %{_bindir}/pump
 %{_mandir}/man1/distccmon-text.1*
 %{_mandir}/man1/include_server.1*
+%{_mandir}/man1/lsdistcc.1*
 %{_mandir}/man1/pump.1*
-
 
 %files masq
 %{masqdir}
