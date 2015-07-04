@@ -8,8 +8,8 @@ Group:		Development/C
 Version:        3.2
 Release:        %{?prerel:0.%{prerel}.}1
 License: 	GPLv2+
-URL:		https://code.google.com/p/distcc/
-Source0:        http://distcc.googlecode.com/files/%{name}-%{version}%{?prerel}.tar.bz2
+URL:		http://distcc.org
+Source0:        https://github.com/distcc/distcc/archive/%{name}-%{version}%{?prerel}.tar.gz
 Source1:	hosts.sample
 Source2:        distccd.service
 Source3:	xinetd.d-distcc
