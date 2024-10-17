@@ -11,7 +11,7 @@ Group:		Development/C
 Version:        3.2
 Release:        %{?prerel:0.%{prerel}.}2
 License: 	GPLv2+
-URL:		http://distcc.org
+URL:		https://distcc.org
 Source0:        http://distcc.googlecode.com/files/%{name}-%{version}%{?prerel}.tar.xz
 Source1:	hosts.sample
 Source2:        distccd.service
