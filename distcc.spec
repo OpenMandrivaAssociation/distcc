@@ -22,6 +22,11 @@ Source6:	distccd.sysconfig
 Patch0:		distcc-3.2rc1-logrotate-mdkconf.patch
 Patch1:		distcc-3.2rc1-desktop-utf8.patch
 Patch2:		distcc-3.2rc1-python3-support.patch
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	pkgconfig(avahi-client) pkgconfig(popt)
 BuildRequires:	pkgconfig(python3) krb5-devel
 Requires:	%{name}-client %{name}-daemon
